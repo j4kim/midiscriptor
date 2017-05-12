@@ -24,13 +24,8 @@ def first_endpoint(dev, direction = usb.util.ENDPOINT_IN):
                 claim(dev, i.bInterfaceNumber)
                 return e
 
-def print_array(data):
-    for i,d in enumerate(data):
-        print("[{}]->{}  ".format(i,d), end="")
-    print("")
-
 def idfy(data):
-    return "{};{};{}".format(data[0], data[1], data[2])
+    return ("{};{};{}".format(data[0], data[1], data[2]), data[3])
 
 def main(config):
     dev = usb.core.find(idVendor=config["vendor_id"])
@@ -39,7 +34,7 @@ def main(config):
     while True:
         try:
             data = ep.read(4, TIMEOUT)
-            input_id = idfy(data)
+            input_id, value = idfy(data)
             if input_id in config["actions"]:
                 print("**********************")
                 command = config["actions"][input_id]
@@ -51,8 +46,9 @@ def main(config):
                 if error:
                     print(error.decode('utf-8'), file=sys.stderr)
             else:
-                print("no action configured for input '%s'" % input_id, file=sys.stderr)
-                print_array(data)
+                #print("no action configured for input '%s'" % input_id, file=sys.stderr)
+                print("{}:{}".format(input_id, value))
+                sys.stdout.flush() # pour empecher le buffering et envoyer les données au pipe
         except usb.core.USBError as err:
             if err.strerror == 'Operation timed out':
                 continue
@@ -66,7 +62,6 @@ def main(config):
 
 
 if __name__ == '__main__':
-    
     try:
         config_file = sys.argv[1]
         with open(config_file) as f:
@@ -78,4 +73,4 @@ if __name__ == '__main__':
         print("Configuration file not found")
     except ValueError:
         print("Invalid configuration file")
-
+        
