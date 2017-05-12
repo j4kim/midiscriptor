@@ -126,10 +126,19 @@ FUNCTIONS = {
     'm':lambda e: print(MENU)
 }
 
-def main():
+def main(config=None):
     global CONFIG
-    dev = select_device()
-    # print(dev)
+
+    if config:
+        CONFIG = config
+        dev = usb.core.find(idVendor=CONFIG["vendor_id"], idProduct=CONFIG["product_id"])
+        if dev == None:
+            print("Device '{}' is not detected".format(CONFIG["device"]))
+            return
+        print("Configuration loaded")
+    else:
+        dev = select_device()
+
     ep = first_endpoint(dev)
 
     print(MENU)
@@ -154,5 +163,19 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+
+    # load potential config file given in argument
+    try:
+        config_file = sys.argv[1]
+        with open(config_file) as f:
+            config = json.loads(f.read())
+        main(config)
+    except IndexError:
+        main()
+    except FileNotFoundError:
+        print("Configuration file not found")
+    except ValueError:
+        print("Invalid configuration file")
+
+        
 
