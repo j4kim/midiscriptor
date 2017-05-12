@@ -1,0 +1,9 @@
+{
+  "device": "lpd8",
+  "vendor_id": 2536,
+  "product_id": 117,
+  "actions": {
+    "9;144;36": "ls -l /",
+    "9;144;37": "chromium-browser --no-sandbox github.com/j4kim/midiscriptor &"
+  }
+}

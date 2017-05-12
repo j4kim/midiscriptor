@@ -1,0 +1,55 @@
+# easykey
+## touches 
+[0] on:9 off:8
+[1] on:144 off:128
+[2] numero de la note [0,127]
+[3] volicité on et off
+## pitchbend
+[0] 14
+[1] 224
+[2] 0 et 127 au max
+[3] niveau [0,127], 64 au milieu
+## modulation, volume et data
+[0] 11
+[1] 176
+[2] 1 (modulation), 7 (volume), 10 (data)
+[3] [0,127]
+
+
+# lpd8
+## pads
+[0] on:9 off:8
+[1] on:128 off:144
+[2] numero de la note [36,43] sur le program 1
+[3] on:vélocité off:127
+## knobs
+[0] 11
+[1] 176
+[2] numéro du potard [1,8]
+[3] [0,127]
+## prog chng + pads
+messages que pour on
+[0] 12
+[1] 192
+[2] numéro du pad [0,7]
+[3] 0
+## cc + pads
+[0] 11
+[1] 176
+[2] numéro du pad [1,9] sans le 7 (wtf?)
+[3] on:vélocité off:0
+
+
+# emu
+sans arret : [15, 248, 0, 0] 7 fois puis [15, 254, 0, 0]
+## touches
+[0] on et off:9
+[1] on et off:144
+[2] numero de la note [36,96] de base
+[3] on:vélocité off:127
+
+
+# launchpad
+## pads
+[0] numéro du pad
+[1] on:127 off:0
