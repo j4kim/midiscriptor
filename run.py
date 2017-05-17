@@ -28,7 +28,10 @@ def idfy(data):
     return ("{};{};{}".format(data[0], data[1], data[2]), data[3])
 
 def main(config):
-    dev = usb.core.find(idVendor=config["vendor_id"])
+    dev = usb.core.find(idVendor=config["vendor_id"], idProduct=config["product_id"])
+    if dev == None:
+        print("Device '{}' not detected".format(config["device"]))
+        return
     ep = first_endpoint(dev)
     print("midiscriptor is running")
     while True:
@@ -70,7 +73,7 @@ if __name__ == '__main__':
     except IndexError:
         print("No configuration file given")
     except FileNotFoundError:
-        print("Configuration file not found")
+        print("File not found")
     except ValueError:
         print("Invalid configuration file")
         

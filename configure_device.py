@@ -133,7 +133,7 @@ def main(config=None):
         CONFIG = config
         dev = usb.core.find(idVendor=CONFIG["vendor_id"], idProduct=CONFIG["product_id"])
         if dev == None:
-            print("Device '{}' is not detected".format(CONFIG["device"]))
+            print("Device '{}' not detected".format(CONFIG["device"]))
             return
         print("Configuration loaded")
     else:
