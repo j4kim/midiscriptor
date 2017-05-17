@@ -3,25 +3,38 @@ from threading import Thread
 
 pygame.init()
 
-size = 2 * [508] # = [508, 508]
+SIZE_FACTOR = 4
+size = 2 * [127 * SIZE_FACTOR] # = [508, 508]
 screen = pygame.display.set_mode(size)
 
 KNOBS = {}
-COLOR = [0,0,0]
+COLOR = [255,255,255]
+POS = [0,0]
+SIZE = 6
 
-def color(i, v):
-    COLOR[i] = v
+def color(idx, value):
+    COLOR[idx] = value
+
+def pos(idx, value):
+    POS[idx] = value
+
+def size(value):
+    global SIZE
+    SIZE = value
 
 # crée un itérateur sur les fonctions
 # à chaque fois que l'utilisateur touche un nouveau bouton,
 # l'id du bouton sera associé à une nouvelle fonction
-# une fois tous les boutons assignés, la fonction default est appelée
 functions = iter([
-    lambda x: color(0, x*2), # x va de 0 à 127
-    lambda x: color(1, x*2),
-    lambda x: color(2, x*2)
+    lambda x: pos(0, x*SIZE_FACTOR),
+    lambda y: pos(1, y*SIZE_FACTOR),
+    lambda d: size(d*2),
+    lambda r: color(0, r*2),
+    lambda g: color(1, g*2),
+    lambda b: color(2, b*2)
 ])
 
+# une fois tous les boutons assignés, la fonction default est appelée
 default = lambda x: print("Received value: %d" % x)
 
 while True:
@@ -37,6 +50,5 @@ while True:
 
     f(int(value))
 
-
-    screen.fill(COLOR)
+    pygame.draw.circle(screen, COLOR, POS, SIZE)
     pygame.display.flip()
