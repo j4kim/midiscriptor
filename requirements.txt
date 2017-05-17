@@ -1,1 +1,5 @@
+PyUserInput==0.1.11
+pyperclip==1.5.27
+python-xlib==0.19
 pyusb==1.0.0
+six==1.10.0
