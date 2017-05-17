@@ -2,15 +2,7 @@ knobs = {}
 
 chars = "*+#.-_|/0123456789"
 
-def next_char():
-    global chars
-    n=0
-    while True:
-        yield chars[n]
-        n += 1
-        n %= len(chars)
-
-char_generator = next_char()    
+char_generator = iter(chars)
 
 while True:
     try:
@@ -20,10 +12,12 @@ while True:
     
     if id.split(";")[0] == "8":
         # on ne traite pas les signaux de relachements,
-        # qui ont toujours une valeurs ä 127
+        # qui ont toujours une valeurs à 127
         continue
     
     if id in knobs:
-        print(knobs[id] * int(value))
+        char = knobs[id]
     else:
-        knobs[id] = next(char_generator)
+        char = knobs[id] = next(char_generator, "^")
+        
+    print(char * int(value))
