@@ -50,6 +50,7 @@ def select_device():
         "device": dev.product,
         "vendor_id": dev.idVendor,
         "product_id": dev.idProduct,
+        "mode":"output",
         "actions":{}
     }
     return dev
@@ -112,18 +113,33 @@ def configure(ep):
         CONFIG["actions"][input_id] = input("Type the command associated to the input:\n")
         print("Input successfully configured")
 
+def mode(ep):
+    global CONFIG
+    modes = {"o":"output","c":"command","k":"keyboard"}
+
+    s ="Select mode:"
+    for k,m in modes.items():
+        s += "\n  {} : {} {}".format(k, m.capitalize(), "(selected)" if CONFIG["mode"] == m else "")
+    print(s)
+    
+    choice = "?"
+    while choice not in modes:
+        choice = input("Mode (default:o): ")
+        CONFIG["mode"] = modes.get(choice,"o")
+
 def show(ep):
     global CONFIG
     print("Actual configuration:")
     pprint(CONFIG)
 
-MENU = "\nMenu:\n  q - Quit\n  t - Train\n  c - Configure an input\n  s - Show configuration\n  m - Show this menu"
+MENU = "\nMenu:\n  q - Quit\n  t - Train\n  c - Configure an input\n  m - Change mode\n  s - Show configuration\n  h - Show this help menu"
 
 FUNCTIONS = {
     't':train,
     'c':configure,
     's':show,
-    'm':lambda e: print(MENU)
+    'm':mode,
+    'h':lambda e: print(MENU)
 }
 
 def main(config=None):

@@ -3,7 +3,7 @@
     "product_id": 117,
     "device": "LPD8",
     "actions": {
-        "9;144;43": "echo \"SALIT SALUT JE SUIS LE PAD 8\"",
-        "9;144;40": "echo \"COUCOU LES LAPINOUS JE SUIS LE PAD 5\""
-    }
+        "9;144;36": "coucou"
+    },
+    "mode": "keyboard"
 }

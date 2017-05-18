@@ -10,6 +10,7 @@ KNOBS = {}
 COLOR = [0,0,0]
 
 def color(i, v):
+    global COLOR
     COLOR[i] = v
 
 # crée un itérateur sur les fonctions
