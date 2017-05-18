@@ -55,13 +55,16 @@ def select_device():
     }
     return dev
 
+
 def print_array(data):
     for i,d in enumerate(data):
         print("[{}]->{}  ".format(i,d), end="")
     print("")
 
+
 def idfy(data):
     return "{};{};{}".format(data[0], data[1], data[2])
+
 
 def train(ep):
     print("Now you can try your inputs")
@@ -83,6 +86,7 @@ def train(ep):
         except KeyboardInterrupt:
             print('')
             break
+
 
 def configure(ep):
     global CONFIG
@@ -113,6 +117,7 @@ def configure(ep):
         CONFIG["actions"][input_id] = input("Type the command associated to the input:\n")
         print("Input successfully configured")
 
+
 def mode(ep):
     global CONFIG
     modes = {"o":"output","c":"command","k":"keyboard"}
@@ -127,10 +132,12 @@ def mode(ep):
         choice = input("Mode (default:o): ")
         CONFIG["mode"] = modes.get(choice,"o")
 
+
 def show(ep):
     global CONFIG
     print("Actual configuration:")
     pprint(CONFIG)
+
 
 MENU = "\nMenu:\n  q - Quit\n  t - Train\n  c - Configure an input\n  m - Change mode\n  s - Show configuration\n  h - Show this help menu"
 
@@ -141,6 +148,7 @@ FUNCTIONS = {
     'm':mode,
     'h':lambda e: print(MENU)
 }
+
 
 def main(config=None):
     global CONFIG

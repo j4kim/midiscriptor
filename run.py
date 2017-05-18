@@ -1,6 +1,9 @@
 import sys, usb.core, usb.util, json
 import subprocess
+from pykeyboard import PyKeyboard
+from pyperclip import copy
 
+keyboard = PyKeyboard()
 TIMEOUT = 100
 
 def claim(dev, interface):
@@ -25,7 +28,40 @@ def first_endpoint(dev, direction = usb.util.ENDPOINT_IN):
                 return e
 
 def idfy(data):
-    return ("{};{};{}".format(data[0], data[1], data[2]), data[3])
+    input_id = "{};{};{}".format(data[0], data[1], data[2])
+    return (input_id, data[3])
+
+
+def execute_o(input_id, value, actions):
+    input_id, value = idfy(data)
+    print("{}:{}".format(input_id, value))
+    sys.stdout.flush() # pour empecher le buffering et envoyer les données au pipe
+
+def execute_k(input_id, value, actions):
+    if input_id in actions:
+        copy(actions[input_id])
+        keyboard.press_key(keyboard.shift_key)
+        keyboard.tap_key(keyboard.insert_key)
+        keyboard.release_key(keyboard.shift_key)
+
+def execute_c(input_id, value, actions):
+    if input_id in actions:
+        print("**********************")
+        command = actions[input_id]
+        print("subprocessing command '{}'".format(command))
+        process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
+        output, error = process.communicate()
+        if output:
+            print(output.decode('utf-8'))
+        if error:
+            print(error.decode('utf-8'), file=sys.stderr)
+
+functions = {
+    "output": execute_o,
+    "keyboard": execute_k,
+    "command": execute_c
+}
+
 
 def main(config):
     dev = usb.core.find(idVendor=config["vendor_id"], idProduct=config["product_id"])
@@ -38,20 +74,7 @@ def main(config):
         try:
             data = ep.read(4, TIMEOUT)
             input_id, value = idfy(data)
-            if input_id in config["actions"]:
-                print("**********************")
-                command = config["actions"][input_id]
-                print("subprocess command '{}'".format(command))
-                process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
-                output, error = process.communicate()
-                if output:
-                    print(output.decode('utf-8'))
-                if error:
-                    print(error.decode('utf-8'), file=sys.stderr)
-            else:
-                #print("no action configured for input '%s'" % input_id, file=sys.stderr)
-                print("{}:{}".format(input_id, value))
-                sys.stdout.flush() # pour empecher le buffering et envoyer les données au pipe
+            functions[config["mode"]](input_id, value, config["actions"])
         except usb.core.USBError as err:
             if err.strerror == 'Operation timed out':
                 continue
@@ -76,4 +99,3 @@ if __name__ == '__main__':
         print("File not found")
     except ValueError:
         print("Invalid configuration file")
-        

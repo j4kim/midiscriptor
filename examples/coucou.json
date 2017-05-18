@@ -1,9 +1,0 @@
-{
-    "vendor_id": 2536,
-    "product_id": 117,
-    "device": "LPD8",
-    "actions": {
-        "9;144;36": "coucou"
-    },
-    "mode": "keyboard"
-}
