@@ -1,5 +1,4 @@
-import sys, usb.core, usb.util, json
-import subprocess
+import sys, usb.core, usb.util, json, re, subprocess
 from pykeyboard import PyKeyboard
 from pyperclip import copy
 
@@ -48,13 +47,22 @@ def execute_c(input_id, value, actions):
     if input_id in actions:
         print("**********************")
         command = actions[input_id]
+        m = re.findall(r"{{\d+:\d+}}", command)
+        if m:
+            a, b = re.findall(r"\d+", m[0])
+            a, b = int(a), int(b)
+            value = int((b-a)/127*value+a)
+            command = re.sub(r"{{.*}}", str(value), command)
         print("subprocessing command '{}'".format(command))
-        process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
-        output, error = process.communicate()
-        if output:
-            print(output.decode('utf-8'))
-        if error:
-            print(error.decode('utf-8'), file=sys.stderr)
+        try:
+            process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
+            output, error = process.communicate()
+            if output:
+                print(output.decode('utf-8'))
+            if error:
+                print(error.decode('utf-8'), file=sys.stderr)
+        except Exception as e:
+            print(e)
 
 functions = {
     "output": execute_o,

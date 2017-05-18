@@ -1,9 +1,0 @@
-{
-    "device": "Dell Multimedia Pro Keyboard",
-    "product_id": 8209,
-    "vendor_id": 16700,
-    "actions": {
-        "0;0;13": "echo \"COUCOU C'EST LA TOUCHE J\"",
-        "0;0;19": "yolo"
-    }
-}
