@@ -59,7 +59,7 @@ def select_device():
 def clear_buffer(ep):
     while True:
         try:
-            data = ep.read(1, 1)
+            data = ep.read(4, 10)
         except usb.core.USBError as err:
             if err.strerror == 'Operation timed out':
                 break
@@ -93,8 +93,8 @@ def train(ep):
 def configure(ep):
     global CONFIG
     clear_buffer(ep)
-    print("Make the input you want to configure")
     print("Type CTRL+C to go back to menu")
+    print("Make the input you want to configure")
     while True:
         try:
             data = ep.read(4, TIMEOUT)
@@ -107,18 +107,22 @@ def configure(ep):
                 print('Maybe it can help to reconnect your device')
                 return
         except KeyboardInterrupt:
-            break
+            print()
+            return
 
     input_id = idfy(data)
-    choice = input("Configure an action for input {} ? (y/N):".format(input_id))
+    print("Input: {}".format(input_id))
+    
+    if input_id in CONFIG["actions"]:
+        print("Already configured action for this input: '{}'".format(CONFIG["actions"][input_id]))
+        if input("Override existing action ? (y/N):".format()) != "y":
+            return
 
-    if choice == 'y':
-        if input_id in CONFIG["actions"]:
-            print("Already configured action for this input: '{}'".format(CONFIG["actions"][input_id]))
-            if input("Override existing action ? (y/N):".format()) != "y":
-                return
-        CONFIG["actions"][input_id] = input("Type the command associated to the input:\n")
+    print("Type the action associated to the input (or CTRL+C to cancel):")
+    try:
+        CONFIG["actions"][input_id] = input()
         print("Input successfully configured")
+    except KeyboardInterrupt: print()
 
 
 def mode(ep):
@@ -155,7 +159,7 @@ FUNCTIONS = {
 
 def main(config=None):
     global CONFIG
-
+    
     if config:
         CONFIG = config
         dev = usb.core.find(idVendor=CONFIG["vendor_id"], idProduct=CONFIG["product_id"])
