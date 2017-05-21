@@ -56,17 +56,20 @@ def select_device():
     return dev
 
 
-def print_array(data):
-    for i,d in enumerate(data):
-        print("[{}]->{}  ".format(i,d), end="")
-    print("")
-
+def clear_buffer(ep):
+    while True:
+        try:
+            data = ep.read(1, 1)
+        except usb.core.USBError as err:
+            if err.strerror == 'Operation timed out':
+                break
 
 def idfy(data):
     return "{};{};{}".format(data[0], data[1], data[2])
 
 
 def train(ep):
+    clear_buffer(ep)
     print("Now you can try your inputs")
     print("Type CTRL+C to go back to menu")
     print("{:^10}|{:^10}".format("input id","value"))
@@ -87,9 +90,9 @@ def train(ep):
             print('')
             break
 
-
 def configure(ep):
     global CONFIG
+    clear_buffer(ep)
     print("Make the input you want to configure")
     print("Type CTRL+C to go back to menu")
     while True:
@@ -129,8 +132,8 @@ def mode(ep):
     
     choice = "?"
     while choice not in modes:
-        choice = input("Mode (default:o): ")
-        CONFIG["mode"] = modes.get(choice,"o")
+        choice = input("Mode: ")
+    CONFIG["mode"] = modes[choice]
 
 
 def show(ep):
@@ -174,7 +177,7 @@ def main(config=None):
         elif choice in FUNCTIONS:
             FUNCTIONS[choice](ep)
         elif choice != '':
-            print("Unknown command, type m to show menu")
+            print("Unknown command, type h to show help")
             
 
     if input('Save configuration? (y/N): ') == 'y':

@@ -32,7 +32,6 @@ def idfy(data):
 
 
 def execute_o(input_id, value, actions):
-    input_id, value = idfy(data)
     print("{}:{}".format(input_id, value))
     sys.stdout.flush() # pour empecher le buffering et envoyer les données au pipe
 

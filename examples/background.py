@@ -37,7 +37,8 @@ while True:
         f = KNOBS[id] = next(functions, default)
 
     f(int(value))
-
+    
+    pygame.display.set_caption(str(COLOR))
 
     screen.fill(COLOR)
     pygame.display.flip()
