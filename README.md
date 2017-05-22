@@ -6,16 +6,17 @@ Control your Linux system with MIDI devices
 
 * A Linux system
 * A MIDI-USB device (tested on Akai LPD8)
-* Python 3 `python3 -V` 
-* PyUSB `sudo pip3 install pyusb`
+* [Python 3](https://www.python.org/downloads)
+* [libusb](http://libusb.info/) or [OpenUSB](https://sourceforge.net/projects/openusb/)
+* [PyUSB](https://github.com/walac/pyusb#installing-pyusb-on-gnulinux-systems): `sudo pip3 install pyusb`
 
 Only if you want to use the keyboard mode:  
-* PyUserInput `sudo pip3 install pyuserinput`
-* pyperclip `sudo pip3 install pyperclip`
-* xsel `sudo apt-get install xsel`
+* [PyUserInput](https://github.com/PyUserInput/PyUserInput): `sudo pip3 install pyuserinput`
+* [pyperclip](https://github.com/asweigart/pyperclip): `sudo pip3 install pyperclip`
+* [xsel](https://github.com/kfish/xsel): `sudo apt-get install xsel`
 
-Only if you want to run the midipaint example:  
-* pyGame `sudo pip3 install pygame`
+Only if you want to run the `midipaint.py` and `background.py` examples:  
+* [pyGame](http://www.pygame.org/download.shtml): `sudo pip3 install pygame`
 
 ## User guide
 
