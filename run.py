@@ -1,8 +1,5 @@
-import sys, usb.core, usb.util, json, re, subprocess
-from pykeyboard import PyKeyboard
-from pyperclip import copy
+import sys, usb.core, usb.util, json
 
-keyboard = PyKeyboard()
 TIMEOUT = 100
 
 def claim(dev, interface):
@@ -36,22 +33,28 @@ def execute_o(input_id, value, actions):
     sys.stdout.flush() # pour empecher le buffering et envoyer les données au pipe
 
 def execute_k(input_id, value, actions):
+    keyboard = PyKeyboard()
     if input_id in actions:
         copy(actions[input_id])
         keyboard.press_key(keyboard.shift_key)
         keyboard.tap_key(keyboard.insert_key)
         keyboard.release_key(keyboard.shift_key)
+        
+def calibrate(command, value):
+    # recherche dans la commande les chose du genre {{0:100}}
+    # qui doivent être remplacées par une valeur entre 0 et 100 selon la valeur de l'input
+    m = re.findall(r"{{\d+:\d+}}", command)
+    if m:
+        a, b = re.findall(r"\d+", m[0]) # a:"0", b:"100" dans notre exemple
+        a, b = int(a), int(b)
+        value = int((b-a)/127*value+a) # calibrage [0,127] -> [a,b]
+        command = re.sub(r"{{.*}}", str(value), command) # remplace {{...}} par la valeur calibrée
+    return command
 
 def execute_c(input_id, value, actions):
     if input_id in actions:
         print("**********************")
-        command = actions[input_id]
-        m = re.findall(r"{{\d+:\d+}}", command)
-        if m:
-            a, b = re.findall(r"\d+", m[0])
-            a, b = int(a), int(b)
-            value = int((b-a)/127*value+a)
-            command = re.sub(r"{{.*}}", str(value), command)
+        command = calibrate(actions[input_id], value)
         print("subprocessing command '{}'".format(command))
         try:
             process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
@@ -63,25 +66,31 @@ def execute_c(input_id, value, actions):
         except Exception as e:
             print(e)
 
-functions = {
-    "output": execute_o,
-    "keyboard": execute_k,
-    "command": execute_c
-}
-
-
 def main(config):
     dev = usb.core.find(idVendor=config["vendor_id"], idProduct=config["product_id"])
     if dev == None:
         print("Device '{}' not detected".format(config["device"]))
         return
     ep = first_endpoint(dev)
-    print("midiscriptor is running")
+    
+    if config["mode"] == "keyboard":
+        from pykeyboard import PyKeyboard
+        from pyperclip import copy
+        execute = execute_k
+    elif config["mode"] == "command":
+        import subprocess, re
+        execute = execute_c
+    else:
+        config["mode"] = "output"
+        execute = execute_o
+        
+    print("midiscriptor is running in {} mode".format(config["mode"]))
+    
     while True:
         try:
             data = ep.read(4, TIMEOUT)
             input_id, value = idfy(data)
-            functions[config["mode"]](input_id, value, config["actions"])
+            execute(input_id, value, config["actions"])
         except usb.core.USBError as err:
             if err.strerror == 'Operation timed out':
                 continue
