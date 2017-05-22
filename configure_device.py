@@ -1,7 +1,6 @@
-import sys, usb.core, usb.util, subprocess
+import sys, usb.core, usb.util
 from pprint import pprint
 import json
-import pickle
 
 TIMEOUT = 100
 
