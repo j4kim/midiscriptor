@@ -1,8 +1,8 @@
 {
     "actions": {
 	"9;144;40": "play samples/horn.wav",
-	"9;144;41": "play samples/trombone.mp3",
-	"9;144;42": "play samples/badumtss.mp3",
+	"9;144;41": "play samples/trombone.wav",
+	"9;144;42": "play samples/badumtss.wav",
 	"9;144;43": "play samples/win.wav",
         "11;176;8": "amixer sset 'PCM' {{0:100}}%",
         "9;144;36": "ls -l /",

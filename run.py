@@ -1,4 +1,6 @@
-import sys, usb.core, usb.util, json
+import sys, usb.core, usb.util, json, subprocess, re
+from pykeyboard import PyKeyboard
+from pyperclip import copy
 
 TIMEOUT = 100
 
@@ -72,17 +74,20 @@ def main(config):
         print("Device '{}' not detected".format(config["device"]))
         return
     ep = first_endpoint(dev)
+
+##    if config["mode"] == "keyboard":
+##        execute = execute_k
+##    elif config["mode"] == "command":
+##        execute = execute_c
+##    else:
+##        config["mode"] = "output"
+##        execute = execute_o
+
+    functions = {"keyboard":execute_k,
+                 "command": execute_c,
+                 "output":  execute_o}
     
-    if config["mode"] == "keyboard":
-        from pykeyboard import PyKeyboard
-        from pyperclip import copy
-        execute = execute_k
-    elif config["mode"] == "command":
-        import subprocess, re
-        execute = execute_c
-    else:
-        config["mode"] = "output"
-        execute = execute_o
+    execute = functions[config["mode"]]
         
     print("midiscriptor is running in {} mode".format(config["mode"]))
     
