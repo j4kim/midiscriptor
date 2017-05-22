@@ -1,9 +1,9 @@
 {
     "actions": {
 	"9;144;40": "play samples/horn.wav",
-	"9;144;41": "play samples/techno-kick.wav",
-	"9;144;42": "play samples/snare-electro.wav",
-	"9;144;43": "play samples/trumpet_1.wav",
+	"9;144;41": "play samples/trombone.mp3",
+	"9;144;42": "play samples/badumtss.mp3",
+	"9;144;43": "play samples/win.wav",
         "11;176;8": "amixer sset 'PCM' {{0:100}}%",
         "9;144;36": "ls -l /",
         "9;144;37": "chromium-browser --no-sandbox github.com/j4kim/midiscriptor &"
