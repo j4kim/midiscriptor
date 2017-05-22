@@ -5,7 +5,7 @@ Control your Linux system with MIDI devices
 ## Requirements
 
 * A Linux system (may work on other systems if you do the necessary)
-* A MIDI-USB device (tested on [Akai LPD8](http://www.akaipro.com/product/lpd8))
+* A MIDI-USB device (works also with a (second) USB keboard)
 * [Python 3](https://www.python.org/downloads)
 * [libusb](http://libusb.info/) or [OpenUSB](https://sourceforge.net/projects/openusb/)
 * [PyUSB](https://github.com/walac/pyusb#installing-pyusb-on-gnulinux-systems): `sudo pip3 install pyusb`
