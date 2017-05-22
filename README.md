@@ -4,8 +4,8 @@ Control your Linux system with MIDI devices
 
 ## Requirements
 
-* A Linux system
-* A MIDI-USB device (tested on Akai LPD8)
+* A Linux system (may work on other systems if you do the necessary)
+* A MIDI-USB device (tested on [Akai LPD8](http://www.akaipro.com/product/lpd8))
 * [Python 3](https://www.python.org/downloads)
 * [libusb](http://libusb.info/) or [OpenUSB](https://sourceforge.net/projects/openusb/)
 * [PyUSB](https://github.com/walac/pyusb#installing-pyusb-on-gnulinux-systems): `sudo pip3 install pyusb`
@@ -24,4 +24,4 @@ Only if you want to run the `midipaint.py` and `background.py` examples:
 
 * output: midiscriptor produces standard outputs, which can be used using pipes.
 * command: midiscriptor subprocesses user defined command.
-* keyboard: midiscriptor acts like a computer keyboard
+* keyboard: midiscriptor acts like a computer keyboard: user defined text is written where the focus is.
