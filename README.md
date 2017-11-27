@@ -1,3 +1,5 @@
+![Affiche](https://image.noelshack.com/fichiers/2017/48/1/1511800550-midiscriptor-affiche-1.png)
+
 # midiscriptor
 Control your Linux system with MIDI-USB controllers
 
