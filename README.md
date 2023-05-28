@@ -1,4 +1,4 @@
-![Affiche](midiscriptor - affiche.pdf)
+[Affiche](midiscriptor - affiche.pdf)
 
 # midiscriptor
 Control your Linux system with MIDI-USB controllers
